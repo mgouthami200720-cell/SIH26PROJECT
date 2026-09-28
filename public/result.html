@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Trainer Safety Result</title>
+
+    <style>
+
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            background: #101010;
+            color: white;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: auto;
+        }
+
+        .card {
+            background: #1c1c1c;
+            padding: 25px;
+            border-radius: 16px;
+            margin-top: 20px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        }
+
+        h1 {
+            text-align: center;
+            color: #00e676;
+        }
+
+        h2 {
+            margin-top: 0;
+        }
+
+        .score {
+            font-size: 50px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .item {
+            margin: 12px 0;
+            padding: 12px;
+            background: #292929;
+            border-radius: 8px;
+        }
+
+        .weak {
+            color: #ff5252;
+        }
+
+        .success {
+            color: #00e676;
+        }
+
+        #loading {
+            text-align: center;
+            font-size: 18px;
+        }
+
+        #error {
+            text-align: center;
+            color: #ff5252;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>⛏️ Mining Safety Training</h1>
+
+    <div id="loading">
+        Loading trainer result...
+    </div>
+
+    <div id="error"></div>
+
+    <div id="result" style="display:none;">
+
+        <div class="card">
+
+            <h2>Trainer Details</h2>
+
+            <div class="item">
+                <strong>Name:</strong>
+                <span id="trainerName"></span>
+            </div>
+
+            <div class="item">
+                <strong>Trainer ID:</strong>
+                <span id="trainerId"></span>
+            </div>
+
+            <div class="item">
+                <strong>Date:</strong>
+                <span id="date"></span>
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <h2>Assessment Result</h2>
+
+            <div class="score">
+                <span id="score"></span>
+            </div>
+
+            <div class="item">
+                <strong>Percentage:</strong>
+                <span id="percentage"></span>%
+            </div>
+
+            <div class="item">
+                <strong>Time Taken:</strong>
+                <span id="timeTaken"></span>
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <h2>Weak Areas</h2>
+
+            <div id="weakAreas"></div>
+
+        </div>
+
+
+        <div class="card">
+
+            <h2>Retraining</h2>
+
+            <div class="item">
+                <strong>Retraining Score:</strong>
+                <span id="retrainingScore"></span>
+            </div>
+
+            <div class="item">
+                <strong>Retraining Percentage:</strong>
+                <span id="retrainingPercentage"></span>%
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <h2>Training Status</h2>
+
+            <div id="status"></div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+async function loadResult() {
+
+    try {
+
+        const parts =
+            window.location.pathname.split("/");
+
+        const resultId =
+            parts[parts.length - 1];
+
+
+        const response =
+            await fetch(
+                `/api/training-result/${resultId}`
+            );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Training result not found."
+            );
+
+        }
+
+
+        const data =
+            await response.json();
+
+
+        const result =
+            data.result;
+
+
+        document.getElementById("loading")
+            .style.display = "none";
+
+        document.getElementById("result")
+            .style.display = "block";
+
+
+        document.getElementById("trainerName")
+            .textContent =
+            result.trainerName || "Not provided";
+
+
+        document.getElementById("trainerId")
+            .textContent =
+            result.trainerId || result.resultId;
+
+
+        document.getElementById("score")
+            .textContent =
+            `${result.score} / ${result.totalQuestions}`;
+
+
+        document.getElementById("percentage")
+            .textContent =
+            result.percentage || 0;
+
+
+        document.getElementById("timeTaken")
+            .textContent =
+            result.timeTaken || "Not recorded";
+
+
+        document.getElementById("date")
+            .textContent =
+            new Date(
+                result.savedAt
+            ).toLocaleString();
+
+
+        const weakAreas =
+            result.weakAreas || [];
+
+
+        const weakContainer =
+            document.getElementById("weakAreas");
+
+
+        if (weakAreas.length === 0) {
+
+            weakContainer.innerHTML =
+                `<div class="item success">
+                    No major weak areas detected.
+                </div>`;
+
+        } else {
+
+            weakContainer.innerHTML =
+                weakAreas.map(area =>
+                    `<div class="item weak">
+                        ⚠️ ${area}
+                    </div>`
+                ).join("");
+
+        }
+
+
+        document.getElementById("retrainingScore")
+            .textContent =
+            result.retrainingScore ??
+            "Not completed";
+
+
+        document.getElementById("retrainingPercentage")
+            .textContent =
+            result.retrainingPercentage ??
+            "0";
+
+
+        document.getElementById("status")
+            .innerHTML =
+            result.retrainingCompleted
+            ? `<span class="success">
+                ✓ Retraining Completed
+               </span>`
+            : `<span class="weak">
+                Retraining Not Completed
+               </span>`;
+
+
+    } catch (error) {
+
+        document.getElementById("loading")
+            .style.display = "none";
+
+        document.getElementById("error")
+            .textContent =
+            error.message;
+
+    }
+
+}
+
+
+loadResult();
+
+</script>
+
+</body>
+
+</html>

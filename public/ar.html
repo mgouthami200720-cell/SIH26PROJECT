@@ -1,0 +1,1856 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    >
+
+    <meta
+        name="mobile-web-app-capable"
+        content="yes"
+    >
+
+    <meta
+        name="apple-mobile-web-app-capable"
+        content="yes"
+    >
+
+    <title>Mining Gas Leak Safety Training</title>
+
+
+    <!-- A-FRAME -->
+    <script
+        src="https://aframe.io/releases/1.8.0/aframe.min.js">
+    </script>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            min-height: 100%;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f6f8;
+            color: #222;
+        }
+
+
+        body {
+            overflow-x: hidden;
+        }
+
+
+        button {
+            border: none;
+            border-radius: 10px;
+            padding: 13px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            touch-action: manipulation;
+        }
+
+
+        button:active {
+            transform: scale(0.97);
+        }
+
+
+        /* =========================================
+           MAIN APPLICATION
+        ========================================= */
+
+        #app {
+            width: 100%;
+            max-width: 900px;
+            margin: auto;
+            padding: 15px;
+        }
+
+
+        #languageSelection {
+            text-align: center;
+            padding: 25px 10px 15px;
+        }
+
+
+        #languageSelection h1 {
+            margin-bottom: 20px;
+            font-size: clamp(25px, 7vw, 40px);
+        }
+
+
+        #languageSelection button {
+            margin: 5px;
+            min-width: 120px;
+            background: #263238;
+            color: white;
+        }
+
+
+        #languageSelection button:hover {
+            background: #37474f;
+        }
+
+
+        #startSection {
+            text-align: center;
+            padding: 20px 10px 30px;
+        }
+
+
+        #title {
+            font-size: clamp(26px, 7vw, 42px);
+            margin-bottom: 12px;
+        }
+
+
+        #description {
+            font-size: 17px;
+            line-height: 1.6;
+            margin: 10px auto 20px;
+            max-width: 700px;
+        }
+
+
+        #startButton {
+            background: #1769aa;
+            color: white;
+            width: min(90%, 320px);
+            font-size: 18px;
+            padding: 15px;
+        }
+
+
+        /* =========================================
+           TRAINING PANEL
+        ========================================= */
+
+        #trainingPanel {
+            display: none;
+            width: 100%;
+        }
+
+
+        .training-card {
+            background: white;
+            border-radius: 15px;
+            padding: 18px;
+            margin-bottom: 15px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+        }
+
+
+        #gasLeakAlert {
+            display: none;
+            text-align: center;
+            background: #fff3f3;
+            border: 2px solid #d32f2f;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 18px;
+        }
+
+
+        #gasLeakAlert h2 {
+            color: #c62828;
+            margin-top: 0;
+        }
+
+
+        #leakStatus {
+            font-weight: bold;
+            margin-top: 12px;
+        }
+
+
+        #activateGasLeakButton {
+            background: #c62828;
+            color: white;
+            width: 100%;
+            max-width: 350px;
+        }
+
+
+        #arButtonContainer {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+
+        #showARButton {
+            background: #2e7d32;
+            color: white;
+            width: min(95%, 400px);
+            font-size: 18px;
+            padding: 16px;
+        }
+
+
+        /* =========================================
+           EVALUATION / WEAK AREA / RETRAINING
+        ========================================= */
+
+        #evaluation,
+        #weakAnalysis,
+        #retrainingPanel {
+            width: 100%;
+        }
+
+
+        #retrainingButton {
+            background: #ef6c00;
+            color: white;
+            width: 100%;
+            max-width: 400px;
+        }
+
+
+        #retrainingPanel {
+            display: none;
+        }
+
+
+        /* =========================================
+           OLD QUIZ COMPATIBILITY
+        ========================================= */
+
+        /*
+          Your current app.js creates the 10-question
+          quiz dynamically.
+
+          These containers are retained so older parts
+          of app.js do not break.
+        */
+
+        #questionArea,
+        #question1,
+        #question2,
+        #question3 {
+            width: 100%;
+        }
+
+
+        /* =========================================
+           MOBILE AR CONTAINER
+        ========================================= */
+
+        #arSceneContainer {
+
+            display: none;
+
+            position: fixed;
+
+            top: 0;
+            left: 0;
+
+            width: 100vw;
+            height: 100dvh;
+
+            z-index: 9999;
+
+            background: transparent;
+
+            overflow: hidden;
+
+        }
+
+
+        #arSceneContainer a-scene {
+
+            width: 100%;
+            height: 100%;
+
+        }
+
+
+        /* =========================================
+           AR HTML OVERLAY
+        ========================================= */
+
+        #arOverlay {
+
+            position: fixed;
+
+            top: 0;
+            left: 0;
+
+            width: 100%;
+            height: 100%;
+
+            pointer-events: none;
+
+            z-index: 10000;
+
+        }
+
+
+        #arTopBar {
+
+            position: absolute;
+
+            top: env(safe-area-inset-top, 10px);
+            left: 10px;
+            right: 10px;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            gap: 8px;
+
+            pointer-events: auto;
+
+        }
+
+
+        #arTitle {
+
+            background: rgba(0,0,0,0.72);
+
+            color: white;
+
+            padding: 9px 12px;
+
+            border-radius: 10px;
+
+            font-size: 14px;
+
+            font-weight: bold;
+
+            backdrop-filter: blur(5px);
+
+        }
+
+
+        #backToTrainingButton {
+
+            background: rgba(198,40,40,0.92);
+
+            color: white;
+
+            padding: 10px 13px;
+
+            font-size: 14px;
+
+            border-radius: 10px;
+
+        }
+
+
+        #arInfo {
+
+            position: absolute;
+
+            bottom: calc(20px + env(safe-area-inset-bottom));
+
+            left: 50%;
+
+            transform: translateX(-50%);
+
+            width: calc(100% - 30px);
+
+            max-width: 430px;
+
+            background: rgba(0,0,0,0.78);
+
+            color: white;
+
+            padding: 13px 15px;
+
+            border-radius: 14px;
+
+            text-align: center;
+
+            font-size: 14px;
+
+            line-height: 1.45;
+
+            pointer-events: none;
+
+            backdrop-filter: blur(6px);
+
+        }
+
+
+        #arInstruction {
+
+            margin: 0;
+
+        }
+
+
+        #arStatus {
+
+            margin: 6px 0 0;
+
+            font-weight: bold;
+
+        }
+
+
+        /*
+          Mobile AR button supplied by A-Frame.
+        */
+
+        .a-enter-ar {
+
+            position: fixed !important;
+
+            bottom: 100px !important;
+
+            left: 50% !important;
+
+            transform: translateX(-50%) !important;
+
+            z-index: 10001 !important;
+
+            font-size: 16px !important;
+
+            border-radius: 12px !important;
+
+        }
+
+
+        /* =========================================
+           AR SCENE
+        ========================================= */
+
+        #mineScene {
+
+            background: transparent;
+
+        }
+
+
+        /* =========================================
+           SMALL MOBILE DEVICES
+        ========================================= */
+
+        @media (max-width: 480px) {
+
+            #app {
+                padding: 10px;
+            }
+
+
+            #languageSelection {
+                padding-top: 18px;
+            }
+
+
+            #description {
+                font-size: 15px;
+            }
+
+
+            button {
+                font-size: 15px;
+            }
+
+
+            .training-card {
+                padding: 14px;
+            }
+
+
+            #arInfo {
+                font-size: 13px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     MAIN APPLICATION
+===================================================== -->
+
+<div id="app">
+
+
+    <!-- =================================================
+         LANGUAGE SELECTION
+    ================================================== -->
+
+    <section id="languageSelection">
+
+        <h1>
+            Mining Safety Training
+        </h1>
+
+
+        <p>
+            Select your training language
+        </p>
+
+
+        <button
+            onclick="selectLanguage('english')"
+        >
+            English
+        </button>
+
+
+        <button
+            onclick="selectLanguage('hindi')"
+        >
+            हिंदी
+        </button>
+
+    </section>
+
+
+
+    <!-- =================================================
+         START SECTION
+    ================================================== -->
+
+    <section id="startSection">
+
+        <h1 id="title">
+            Mining Gas Leak Safety Training
+        </h1>
+
+
+        <p id="description">
+            AR-Based Vocational Training Simulator for Industrial Safety
+        </p>
+
+
+        <button
+            id="startButton"
+            onclick="startTraining()"
+        >
+            Start Training
+        </button>
+
+    </section>
+
+
+
+    <!-- =================================================
+         TRAINING PANEL
+    ================================================== -->
+
+    <section id="trainingPanel">
+
+
+        <!-- GAS LEAK ALERT -->
+
+        <div
+            id="gasLeakAlert"
+            class="training-card"
+        >
+
+            <h2>
+                🚨 GAS LEAK DETECTED
+            </h2>
+
+
+            <p>
+                A gas leak has been detected in the mining area.
+                Identify the hazard and follow the emergency safety procedure.
+            </p>
+
+
+            <button
+                id="activateGasLeakButton"
+                onclick="activateGasLeak()"
+            >
+                🚨 Activate Gas Leak
+            </button>
+
+
+            <p
+                id="leakStatus"
+                style="display:block;"
+            ></p>
+
+        </div>
+
+
+
+        <!-- =================================================
+             AR BUTTON
+        ================================================== -->
+
+        <div
+            id="arButtonContainer"
+            class="training-card"
+        >
+
+            <h2>
+                Mobile AR Safety Simulation
+            </h2>
+
+
+            <p>
+                Use your phone camera to enter the mining safety
+                simulation and identify the gas-leak hazard.
+            </p>
+
+
+            <button
+                id="showARButton"
+                onclick="showARScene()"
+            >
+                📱 OPEN MOBILE AR
+            </button>
+
+        </div>
+
+
+
+        <!-- =================================================
+             10 QUESTION QUIZ AREA
+
+             app.js dynamically creates:
+             #tenQuestionArea
+        ================================================== -->
+
+        <div
+            id="questionArea"
+            class="training-card"
+        >
+
+            <!--
+              Existing 10-question JavaScript flow
+              will insert the questions here.
+            -->
+
+        </div>
+
+
+
+        <!-- =================================================
+             LEGACY QUESTIONS
+
+             Kept for compatibility with older app.js code.
+             They can remain hidden because the new app.js
+             uses the 10-question system.
+        ================================================== -->
+
+        <div
+            id="question1"
+            style="display:none;"
+        >
+
+            <h3>
+                Question 1
+            </h3>
+
+            <p>
+                You notice a gas leak in the mining area.
+                What should you do first?
+            </p>
+
+            <button
+                onclick="decisionCorrect()"
+            >
+                Move to a safe area and report the hazard
+            </button>
+
+            <button>
+                Continue working near the leak
+            </button>
+
+            <button>
+                Ignore the leak
+            </button>
+
+        </div>
+
+
+
+        <div
+            id="question2"
+            style="display:none;"
+        >
+
+            <h3>
+                Question 2
+            </h3>
+
+            <p>
+                Which of the following can indicate a gas leak?
+            </p>
+
+            <button
+                onclick="hazardCorrect()"
+            >
+                Gas cloud and warning alarm
+            </button>
+
+            <button>
+                Normal tunnel lighting
+            </button>
+
+            <button>
+                Clean floor
+            </button>
+
+        </div>
+
+
+
+        <div
+            id="question3"
+            style="display:none;"
+        >
+
+            <h3>
+                Question 3
+            </h3>
+
+            <p>
+                What is the safest response during a gas leak?
+            </p>
+
+            <button
+                onclick="emergencyCorrect()"
+            >
+                Leave the hazard area and follow the emergency procedure
+            </button>
+
+            <button>
+                Stay near the leak
+            </button>
+
+            <button>
+                Continue normal work
+            </button>
+
+        </div>
+
+
+
+        <!-- =================================================
+             EVALUATION
+        ================================================== -->
+
+        <div
+            id="evaluation"
+            class="training-card"
+        >
+
+        </div>
+
+
+
+        <!-- =================================================
+             WEAK AREA ANALYSIS
+        ================================================== -->
+
+        <div
+            id="weakAnalysis"
+            class="training-card"
+        >
+
+        </div>
+
+        <!-- =================================================
+     QR RESULT
+================================================= -->
+
+<div
+    id="qrResult"
+    class="training-card"
+    style="text-align:center;"
+>
+
+    <h2>📱 Training Result QR</h2>
+
+    <p>
+        Scan this QR code to view the training result.
+    </p>
+
+    <button
+        id="generateQRButton"
+        onclick="generateResultQR()"
+        style="background:#1769aa; color:white; width:100%; max-width:400px;"
+    >
+        📱 Generate QR Code
+    </button>
+
+    <div
+        id="qrCode"
+        style="margin-top:20px;"
+    ></div>
+
+</div>
+
+
+
+        <!-- =================================================
+             RETRAINING
+        ================================================== -->
+
+        <div
+            id="retrainingPanel"
+            class="training-card"
+        >
+
+        </div>
+
+
+        <div
+            style="text-align:center; margin:20px 0;"
+        >
+
+            <button
+                id="retrainingButton"
+                onclick="startRetraining()"
+            >
+                🔄 Start Retraining
+            </button>
+
+        </div>
+
+
+    </section>
+
+</div>
+
+
+
+<!-- =====================================================
+     MOBILE AR CONTAINER
+===================================================== -->
+
+<div
+    id="arSceneContainer"
+>
+
+
+    <!-- =================================================
+         AR HTML OVERLAY
+    ================================================== -->
+
+    <div
+        id="arOverlay"
+    >
+
+
+        <div
+            id="arTopBar"
+        >
+
+            <div
+                id="arTitle"
+            >
+                ⛑ Mining Safety AR
+            </div>
+
+
+            <button
+                id="backToTrainingButton"
+                onclick="backToTraining()"
+            >
+                ← BACK TO QUIZ
+            </button>
+
+        </div>
+
+
+
+        <div
+            id="arInfo"
+        >
+
+            <p id="arInstruction">
+                Move your phone slowly and look around the
+                training environment.
+            </p>
+
+
+            <p
+                id="arStatus"
+            >
+                AR simulation ready
+            </p>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =================================================
+         A-FRAME MOBILE AR SCENE
+    ================================================== -->
+<a-scene
+    id="mineScene"
+    embedded
+    xr-mode-ui="enabled: true; XRMode: ar;"
+    webxr="
+        requiredFeatures: hit-test;
+        optionalFeatures: dom-overlay;
+        overlayElement: #arOverlay;
+    "
+    renderer="
+        antialias: true;
+        colorManagement: true;
+        physicallyCorrectLights: true;
+    "
+    loading-screen="enabled: false;"
+    vr-mode-ui="enabled: false;"
+>
+
+    <!-- =========================================
+         CAMERA
+    ========================================== -->
+
+    <a-entity
+        id="rig"
+        position="0 1.6 0"
+    >
+
+        <a-camera
+            id="arCamera"
+            look-controls="enabled: true"
+        ></a-camera>
+
+    </a-entity>
+
+
+    <!-- =========================================
+         MINING TUNNEL LIGHTING
+    ========================================== -->
+
+    <a-light
+        type="ambient"
+        intensity="0.45"
+        color="#b8c4cc"
+    ></a-light>
+
+    <a-light
+        type="point"
+        position="0 3.4 -2"
+        intensity="1.4"
+        distance="10"
+        decay="2"
+        color="#fff1c7"
+    ></a-light>
+
+    <a-light
+        type="point"
+        position="0 3.4 -7"
+        intensity="1.2"
+        distance="10"
+        decay="2"
+        color="#fff1c7"
+    ></a-light>
+
+    <a-light
+        type="point"
+        position="0 3.4 -13"
+        intensity="1.1"
+        distance="10"
+        decay="2"
+        color="#fff1c7"
+    ></a-light>
+
+    <a-light
+        type="point"
+        position="0 3.4 -19"
+        intensity="1.3"
+        distance="10"
+        decay="2"
+        color="#fff1c7"
+    ></a-light>
+
+
+    <!-- =========================================
+         MAIN TUNNEL
+    ========================================== -->
+
+    <a-entity
+        id="tunnel"
+        position="0 0 0"
+    >
+
+        <!-- FLOOR -->
+
+        <a-plane
+            position="0 0 -11"
+            rotation="-90 0 0"
+            width="7"
+            height="24"
+            color="#292929"
+        ></a-plane>
+
+        <!-- WALKING PATH -->
+
+        <a-plane
+            position="0 0.01 -11"
+            rotation="-90 0 0"
+            width="3.2"
+            height="24"
+            color="#353535"
+        ></a-plane>
+
+
+        <!-- LEFT WALL -->
+
+        <a-box
+            position="-3.6 2.1 -11"
+            width="0.5"
+            height="4.5"
+            depth="24"
+            color="#3b3b3b"
+        ></a-box>
+
+
+        <!-- RIGHT WALL -->
+
+        <a-box
+            position="3.6 2.1 -11"
+            width="0.5"
+            height="4.5"
+            depth="24"
+            color="#3b3b3b"
+        ></a-box>
+
+
+        <!-- CEILING -->
+
+        <a-box
+            position="0 4.35 -11"
+            width="7"
+            height="0.35"
+            depth="24"
+            color="#222222"
+        ></a-box>
+
+
+        <!-- =====================================
+             TUNNEL SUPPORT FRAMES
+        ====================================== -->
+
+        <!-- FRAME 1 -->
+
+        <a-box
+            position="-3.15 2 -2"
+            width="0.22"
+            height="4"
+            depth="0.35"
+            color="#55595c"
+        ></a-box>
+
+        <a-box
+            position="3.15 2 -2"
+            width="0.22"
+            height="4"
+            depth="0.35"
+            color="#55595c"
+        ></a-box>
+
+        <a-box
+            position="0 4 -2"
+            width="6.5"
+            height="0.22"
+            depth="0.35"
+            color="#55595c"
+        ></a-box>
+
+
+        <!-- FRAME 2 -->
+
+        <a-box
+            position="-3.15 2 -7"
+            width="0.22"
+            height="4"
+            depth="0.35"
+            color="#55595c"
+        ></a-box>
+
+        <a-box
+            position="3.15 2 -7"
+            width="0.22"
+            height="4"
+            depth="0.35"
+            color="#55595c"
+        ></a-box>
+
+        <a-box
+            position="0 4 -7"
+            width="6.5"
+            height="0.22"
+            depth="0.35"
+            color="#55595c"
+        ></a-box>
+
+
+        <!-- FRAME 3 -->
+
+        <a-box
+            position="-3.15 2 -13"
+            width="0.22"
+            height="4"
+            depth="0.35"
+            color="#55595c"
+        ></a-box>
+
+        <a-box
+            position="3.15 2 -13"
+            width="0.22"
+            height="4"
+            depth="0.35"
+            color="#55595c"
+        ></a-box>
+
+        <a-box
+            position="0 4 -13"
+            width="6.5"
+            height="0.22"
+            depth="0.35"
+            color="#55595c"
+        ></a-box>
+
+
+        <!-- FRAME 4 -->
+
+        <a-box
+            position="-3.15 2 -19"
+            width="0.22"
+            height="4"
+            depth="0.35"
+            color="#55595c"
+        ></a-box>
+
+        <a-box
+            position="3.15 2 -19"
+            width="0.22"
+            height="4"
+            depth="0.35"
+            color="#55595c"
+        ></a-box>
+
+        <a-box
+            position="0 4 -19"
+            width="6.5"
+            height="0.22"
+            depth="0.35"
+            color="#55595c"
+        ></a-box>
+
+
+        <!-- =====================================
+             CEILING LIGHTS
+        ====================================== -->
+
+        <a-box
+            position="0 4.05 -2"
+            width="0.7"
+            height="0.08"
+            depth="1.2"
+            color="#eeeeee"
+        ></a-box>
+
+        <a-box
+            position="0 4.05 -8"
+            width="0.7"
+            height="0.08"
+            depth="1.2"
+            color="#eeeeee"
+        ></a-box>
+
+        <a-box
+            position="0 4.05 -14"
+            width="0.7"
+            height="0.08"
+            depth="1.2"
+            color="#eeeeee"
+        ></a-box>
+
+        <a-box
+            position="0 4.05 -20"
+            width="0.7"
+            height="0.08"
+            depth="1.2"
+            color="#eeeeee"
+        ></a-box>
+
+
+        <!-- =====================================
+             FLOOR SAFETY MARKINGS
+        ====================================== -->
+
+        <a-box
+            position="-1.15 0.025 -11"
+            width="0.08"
+            height="0.04"
+            depth="24"
+            color="#d6a900"
+        ></a-box>
+
+        <a-box
+            position="1.15 0.025 -11"
+            width="0.08"
+            height="0.04"
+            depth="24"
+            color="#d6a900"
+        ></a-box>
+
+
+        <!-- =====================================
+             MINING RAILS
+        ====================================== -->
+
+        <a-box
+            position="-0.65 0.09 -11"
+            width="0.12"
+            height="0.12"
+            depth="22"
+            color="#777777"
+        ></a-box>
+
+        <a-box
+            position="0.65 0.09 -11"
+            width="0.12"
+            height="0.12"
+            depth="22"
+            color="#777777"
+        ></a-box>
+
+
+        <!-- RAIL SLEEPERS -->
+
+        <a-box position="0 0.06 -3" width="1.8" height="0.1" depth="0.22" color="#5d4037"></a-box>
+        <a-box position="0 0.06 -5" width="1.8" height="0.1" depth="0.22" color="#5d4037"></a-box>
+        <a-box position="0 0.06 -7" width="1.8" height="0.1" depth="0.22" color="#5d4037"></a-box>
+        <a-box position="0 0.06 -9" width="1.8" height="0.1" depth="0.22" color="#5d4037"></a-box>
+        <a-box position="0 0.06 -11" width="1.8" height="0.1" depth="0.22" color="#5d4037"></a-box>
+        <a-box position="0 0.06 -13" width="1.8" height="0.1" depth="0.22" color="#5d4037"></a-box>
+        <a-box position="0 0.06 -15" width="1.8" height="0.1" depth="0.22" color="#5d4037"></a-box>
+        <a-box position="0 0.06 -17" width="1.8" height="0.1" depth="0.22" color="#5d4037"></a-box>
+        <a-box position="0 0.06 -19" width="1.8" height="0.1" depth="0.22" color="#5d4037"></a-box>
+
+
+        <!-- =====================================
+             INDUSTRIAL PIPE SYSTEM
+        ====================================== -->
+
+        <a-cylinder
+            position="2.75 1.5 -11"
+            rotation="90 0 0"
+            radius="0.20"
+            height="22"
+            color="#55595c"
+        ></a-cylinder>
+
+        <a-cylinder
+            position="2.75 2.45 -11"
+            rotation="90 0 0"
+            radius="0.11"
+            height="22"
+            color="#3d4650"
+        ></a-cylinder>
+
+        <a-cylinder
+            position="-2.8 2.7 -11"
+            rotation="90 0 0"
+            radius="0.12"
+            height="20"
+            color="#59636b"
+        ></a-cylinder>
+
+
+        <!-- =====================================
+             PIPE SUPPORTS
+        ====================================== -->
+
+        <a-box
+            position="2.75 1.5 -4"
+            width="0.12"
+            height="2"
+            depth="0.12"
+            color="#444444"
+        ></a-box>
+
+        <a-box
+            position="2.75 1.5 -10"
+            width="0.12"
+            height="2"
+            depth="0.12"
+            color="#444444"
+        ></a-box>
+
+        <a-box
+            position="2.75 1.5 -16"
+            width="0.12"
+            height="2"
+            depth="0.12"
+            color="#444444"
+        ></a-box>
+
+
+        <!-- =====================================
+             PPE SAFETY STATION
+        ====================================== -->
+
+        <a-entity
+            id="ppeStation"
+            position="-2.45 0.05 -3"
+        >
+
+            <!-- small rack -->
+
+            <a-box
+                position="0 0.55 0"
+                width="1.3"
+                height="0.08"
+                depth="0.65"
+                color="#555555"
+            ></a-box>
+
+            <a-box
+                position="-0.55 0.3 0"
+                width="0.08"
+                height="0.6"
+                depth="0.08"
+                color="#333333"
+            ></a-box>
+
+            <a-box
+                position="0.55 0.3 0"
+                width="0.08"
+                height="0.6"
+                depth="0.08"
+                color="#333333"
+            ></a-box>
+
+
+            <!-- HELMET -->
+
+            <a-sphere
+                position="-0.35 0.78 0"
+                radius="0.18"
+                scale="1 0.65 1"
+                color="#f4c20d"
+            ></a-sphere>
+
+            <a-cylinder
+                position="-0.35 0.68 0"
+                radius="0.22"
+                height="0.035"
+                color="#f4c20d"
+            ></a-cylinder>
+
+
+            <!-- MASK -->
+
+            <a-box
+                position="0.25 0.67 0"
+                width="0.25"
+                height="0.18"
+                depth="0.18"
+                color="#263238"
+            ></a-box>
+
+            <a-cylinder
+                position="0.10 0.67 0"
+                rotation="0 0 90"
+                radius="0.055"
+                height="0.07"
+                color="#c62828"
+            ></a-cylinder>
+
+            <a-cylinder
+                position="0.40 0.67 0"
+                rotation="0 0 90"
+                radius="0.055"
+                height="0.07"
+                color="#c62828"
+            ></a-cylinder>
+
+
+            <!-- BOOTS -->
+
+            <a-box
+                position="-0.25 0.18 0"
+                width="0.18"
+                height="0.35"
+                depth="0.28"
+                color="#202020"
+            ></a-box>
+
+            <a-box
+                position="0.25 0.18 0"
+                width="0.18"
+                height="0.35"
+                depth="0.28"
+                color="#202020"
+            ></a-box>
+
+
+            <a-text
+                value="PPE"
+                position="0 1.1 0"
+                align="center"
+                width="2"
+                color="#ffffff"
+            ></a-text>
+
+        </a-entity>
+
+
+        <!-- =====================================
+             GAS LEAK SOURCE
+        ====================================== -->
+
+        <a-entity
+            id="gasLeakSource"
+            position="2.72 1.5 -8"
+        >
+
+            <!-- pipe joint -->
+
+            <a-cylinder
+                radius="0.30"
+                height="0.65"
+                rotation="90 0 0"
+                color="#444444"
+            ></a-cylinder>
+
+
+            <!-- red valve -->
+
+            <a-torus
+                position="0 0.45 0"
+                rotation="0 90 0"
+                radius="0.23"
+                radius-tubular="0.045"
+                color="#c62828"
+            ></a-torus>
+
+
+            <a-cylinder
+                position="0 0.2 0"
+                radius="0.05"
+                height="0.35"
+                color="#777777"
+            ></a-cylinder>
+
+
+            <!-- damaged crack -->
+
+            <a-box
+                position="-0.22 -0.05 0"
+                width="0.06"
+                height="0.32"
+                depth="0.12"
+                rotation="0 0 25"
+                color="#111111"
+            ></a-box>
+
+        </a-entity>
+
+
+        <!-- =====================================
+             GAS CLOUD
+        ====================================== -->
+
+        <a-entity
+            id="gasHazard"
+            position="2.1 1.5 -8"
+        >
+
+            <a-sphere
+                radius="0.45"
+                color="#9ed8a5"
+                material="
+                    opacity:0.38;
+                    transparent:true;
+                    depthWrite:false;
+                "
+                animation="
+                    property:scale;
+                    from:0.5 0.5 0.5;
+                    to:2.6 1.8 2.3;
+                    dur:3200;
+                    dir:alternate;
+                    loop:true;
+                "
+            ></a-sphere>
+
+
+            <a-sphere
+                position="-0.4 0.3 0.2"
+                radius="0.55"
+                color="#b8e0ad"
+                material="
+                    opacity:0.28;
+                    transparent:true;
+                    depthWrite:false;
+                "
+                animation="
+                    property:position;
+                    from:-0.3 0.2 0;
+                    to:-1.3 1.2 0.3;
+                    dur:3600;
+                    dir:alternate;
+                    loop:true;
+                "
+            ></a-sphere>
+
+
+            <a-sphere
+                position="-0.6 -0.1 0.2"
+                radius="0.7"
+                color="#a8d5a2"
+                material="
+                    opacity:0.22;
+                    transparent:true;
+                    depthWrite:false;
+                "
+                animation="
+                    property:scale;
+                    from:0.5 0.3 0.5;
+                    to:2.2 0.7 2;
+                    dur:3000;
+                    dir:alternate;
+                    loop:true;
+                "
+            ></a-sphere>
+
+
+            <a-sphere
+                position="-1.1 -0.4 0"
+                radius="0.8"
+                color="#b5d9a8"
+                material="
+                    opacity:0.18;
+                    transparent:true;
+                    depthWrite:false;
+                "
+                animation="
+                    property:position;
+                    from:-0.8 -0.2 0;
+                    to:-2 -0.5 0.5;
+                    dur:4200;
+                    dir:alternate;
+                    loop:true;
+                "
+            ></a-sphere>
+
+        </a-entity>
+
+
+        <!-- =====================================
+             WARNING LIGHT
+        ====================================== -->
+
+        <a-light
+            type="point"
+            position="1.5 3 -8"
+            intensity="2"
+            distance="7"
+            color="#ff0000"
+            animation="
+                property:intensity;
+                from:0.5;
+                to:2.5;
+                dur:700;
+                dir:alternate;
+                loop:true;
+            "
+        ></a-light>
+
+
+        <!-- =====================================
+             WARNING BOARD
+        ====================================== -->
+
+        <a-entity
+            id="warningSystem"
+            position="0 2.7 -8"
+            scale="0.2 0.2 0.2"
+            animation="
+                property:scale;
+                from:0.2 0.2 0.2;
+                to:1 1 1;
+                dur:900;
+                easing:easeOutBack;
+                loop:true;
+                dir:alternate;
+            "
+        >
+
+            <a-box
+                width="2.8"
+                height="1.25"
+                depth="0.08"
+                color="#b71c1c"
+            ></a-box>
+
+            <a-text
+                value="⚠ WARNING ⚠"
+                position="0 0.32 0.06"
+                align="center"
+                width="4"
+                color="#ffffff"
+            ></a-text>
+
+            <a-text
+                value="GAS LEAK DETECTED"
+                position="0 0 0.06"
+                align="center"
+                width="3.4"
+                color="#ffd600"
+            ></a-text>
+
+            <a-text
+                value="MOVE TO SAFE AREA"
+                position="0 -0.32 0.06"
+                align="center"
+                width="3"
+                color="#ffffff"
+            ></a-text>
+
+        </a-entity>
+
+
+        <!-- =====================================
+             EMERGENCY EXIT AT END
+        ====================================== -->
+
+        <a-entity
+            id="emergencyExit"
+            position="0 0 -21"
+        >
+
+            <!-- green safe area -->
+
+            <a-plane
+                position="0 0.02 1.5"
+                rotation="-90 0 0"
+                width="3"
+                height="3"
+                color="#218c4a"
+                material="
+                    opacity:0.65;
+                    transparent:true;
+                "
+            ></a-plane>
+
+
+            <!-- left door frame -->
+
+            <a-box
+                position="-1.25 1.3 0"
+                width="0.18"
+                height="2.6"
+                depth="0.25"
+                color="#263238"
+            ></a-box>
+
+
+            <!-- right door frame -->
+
+            <a-box
+                position="1.25 1.3 0"
+                width="0.18"
+                height="2.6"
+                depth="0.25"
+                color="#263238"
+            ></a-box>
+
+
+            <!-- top frame -->
+
+            <a-box
+                position="0 2.6 0"
+                width="2.7"
+                height="0.18"
+                depth="0.25"
+                color="#263238"
+            ></a-box>
+
+
+            <!-- exit doors -->
+
+            <a-box
+                position="-0.55 1.3 0"
+                width="1.05"
+                height="2.4"
+                depth="0.12"
+                color="#68747a"
+            ></a-box>
+
+            <a-box
+                position="0.55 1.3 0"
+                width="1.05"
+                height="2.4"
+                depth="0.12"
+                color="#68747a"
+            ></a-box>
+
+
+            <!-- EXIT SIGN -->
+
+            <a-box
+                position="0 3.05 0"
+                width="1.6"
+                height="0.48"
+                depth="0.12"
+                color="#20a957"
+            ></a-box>
+
+            <a-text
+                value="EMERGENCY EXIT"
+                position="0 3.05 0.08"
+                align="center"
+                width="3.5"
+                color="#ffffff"
+            ></a-text>
+
+        </a-entity>
+
+
+        <!-- =====================================
+             EXTRA MINING DETAILS
+        ====================================== -->
+
+        <!-- control panel -->
+
+        <a-entity
+            position="-3.25 1.5 -5"
+        >
+
+            <a-box
+                width="0.15"
+                height="1.3"
+                depth="0.9"
+                color="#505050"
+            ></a-box>
+
+            <a-box
+                position="0.1 0.3 0"
+                width="0.04"
+                height="0.35"
+                depth="0.55"
+                color="#162a20"
+            ></a-box>
+
+            <a-sphere
+                position="0.12 -0.25 0"
+                radius="0.06"
+                color="#ff0000"
+            ></a-sphere>
+
+            <a-sphere
+                position="0.12 -0.42 0"
+                radius="0.06"
+                color="#00c853"
+            ></a-sphere>
+
+        </a-entity>
+
+
+        <!-- mine cart -->
+
+        <a-box
+            position="-1.7 0.75 -15"
+            width="1.6"
+            height="1"
+            depth="2"
+            color="#555555"
+        ></a-box>
+
+        <a-cylinder
+            position="-2.2 0.25 -15.7"
+            rotation="90 0 0"
+            radius="0.3"
+            height="0.18"
+            color="#222222"
+        ></a-cylinder>
+
+        <a-cylinder
+            position="-1.2 0.25 -15.7"
+            rotation="90 0 0"
+            radius="0.3"
+            height="0.18"
+            color="#222222"
+        ></a-cylinder>
+
+
+        <!-- =====================================
+             TUNNEL DUST
+        ====================================== -->
+
+        <a-sphere
+            position="-1.8 1.5 -6"
+            radius="0.05"
+            color="#aaaaaa"
+            material="opacity:0.35; transparent:true;"
+            animation="
+                property:position;
+                from:-1.8 1 -6;
+                to:-1.8 3 -6;
+                dur:3500;
+                dir:alternate;
+                loop:true;
+            "
+        ></a-sphere>
+
+        <a-sphere
+            position="1.5 1.2 -14"
+            radius="0.05"
+            color="#aaaaaa"
+            material="opacity:0.3; transparent:true;"
+            animation="
+                property:position;
+                from:1.5 1 -14;
+                to:1.5 3 -14;
+                dur:3000;
+                dir:alternate;
+                loop:true;
+            "
+        ></a-sphere>
+
+
+</a-scene>
+   
+
+</div>
+
+
+
+<!-- =====================================================
+     APP JAVASCRIPT
+===================================================== -->
+
+<script src="app.js"></script>
+
+
+
+<!-- =====================================================
+     AR CONTROL JAVASCRIPT
+===================================================== -->
+
+
+
+
+</body>
+
+</html>                                                                                                                                                                                                                                                                          

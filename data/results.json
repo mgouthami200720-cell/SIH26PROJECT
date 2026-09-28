@@ -1,0 +1,278 @@
+[
+  {
+    "score": 30,
+    "accuracy": 100,
+    "responseTime": 13,
+    "language": "english",
+    "weakAreas": [],
+    "date": "9/21/2026, 2:42:49 PM"
+  },
+  {
+    "score": 20,
+    "accuracy": 67,
+    "responseTime": 10,
+    "language": "english",
+    "weakAreas": [
+      "Hazard Identification"
+    ],
+    "date": "9/21/2026, 2:43:30 PM"
+  },
+  {
+    "score": 30,
+    "accuracy": 100,
+    "responseTime": 15,
+    "language": "hindi",
+    "weakAreas": [],
+    "date": "9/21/2026, 2:45:57 PM"
+  },
+  {
+    "score": 20,
+    "accuracy": 67,
+    "responseTime": 6,
+    "language": "hindi",
+    "weakAreas": [
+      "Decision Making"
+    ],
+    "date": "9/21/2026, 2:47:43 PM"
+  },
+  {
+    "score": 20,
+    "accuracy": 67,
+    "responseTime": 6,
+    "language": "hindi",
+    "weakAreas": [
+      "Hazard Identification"
+    ],
+    "date": "9/21/2026, 2:53:39 PM"
+  },
+  {
+    "score": 20,
+    "accuracy": 67,
+    "responseTime": 10,
+    "language": "hindi",
+    "weakAreas": [
+      "Hazard Identification"
+    ],
+    "date": "9/21/2026, 2:53:43 PM"
+  },
+  {
+    "score": 20,
+    "accuracy": 67,
+    "responseTime": 5,
+    "language": "hindi",
+    "weakAreas": [
+      "Hazard Identification"
+    ],
+    "date": "9/21/2026, 3:01:53 PM"
+  },
+  {
+    "score": 30,
+    "accuracy": 100,
+    "responseTime": 38,
+    "language": "english",
+    "weakAreas": [],
+    "date": "9/21/2026, 3:16:47 PM"
+  },
+  {
+    "score": 10,
+    "accuracy": 33,
+    "responseTime": 54,
+    "language": "english",
+    "weakAreas": [
+      "Decision Making",
+      "Emergency Response"
+    ],
+    "date": "9/21/2026, 3:18:26 PM"
+  },
+  {
+    "score": 20,
+    "accuracy": 67,
+    "responseTime": 7,
+    "language": "hindi",
+    "weakAreas": [
+      "निर्णय लेना"
+    ],
+    "date": "9/21/2026, 3:19:13 PM"
+  },
+  {
+    "score": 20,
+    "accuracy": 67,
+    "responseTime": 20,
+    "language": "santali",
+    "weakAreas": [
+      "ᱡᱚᱠᱷᱚᱢ ᱧᱮᱞ"
+    ],
+    "date": "9/21/2026, 3:20:50 PM"
+  },
+  {
+    "language": "english",
+    "score": 30,
+    "accuracy": 100,
+    "responseTime": 17,
+    "decisionCorrect": true,
+    "hazardCorrect": true,
+    "emergencyCorrect": true,
+    "weakAreas": [],
+    "date": "9/21/2026, 3:31:02 PM"
+  },
+  {
+    "language": "hindi",
+    "score": 30,
+    "accuracy": 100,
+    "responseTime": 15,
+    "decisionCorrect": true,
+    "hazardCorrect": true,
+    "emergencyCorrect": true,
+    "weakAreas": [],
+    "date": "9/21/2026, 3:32:18 PM"
+  },
+  {
+    "language": "english",
+    "score": 0,
+    "accuracy": 0,
+    "responseTime": 6,
+    "decisionCorrect": false,
+    "hazardCorrect": false,
+    "emergencyCorrect": false,
+    "weakAreas": [
+      "Decision Making",
+      "Hazard Identification",
+      "Emergency Response"
+    ],
+    "date": "9/21/2026, 3:33:14 PM"
+  },
+  {
+    "language": "hindi",
+    "score": 20,
+    "accuracy": 67,
+    "responseTime": 8,
+    "decisionCorrect": false,
+    "hazardCorrect": true,
+    "emergencyCorrect": true,
+    "weakAreas": [
+      "निर्णय लेना"
+    ],
+    "date": "9/21/2026, 3:34:11 PM"
+  },
+  {
+    "language": "santali",
+    "score": 20,
+    "accuracy": 67,
+    "responseTime": 24,
+    "decisionCorrect": true,
+    "hazardCorrect": false,
+    "emergencyCorrect": true,
+    "weakAreas": [
+      "ᱦᱟᱹᱴᱤᱝ ᱪᱤᱱᱦᱟᱹ"
+    ],
+    "date": "9/21/2026, 3:35:01 PM"
+  },
+  {
+    "language": "english",
+    "score": 10,
+    "accuracy": 33,
+    "responseTime": 10,
+    "decisionCorrect": false,
+    "hazardCorrect": true,
+    "emergencyCorrect": false,
+    "weakAreas": [
+      "Decision Making",
+      "Emergency Response"
+    ],
+    "date": "9/21/2026, 3:45:29 PM"
+  },
+  {
+    "score": 20,
+    "accuracy": 67,
+    "responseTime": 7,
+    "language": "english",
+    "weakAreas": [
+      "Hazard Identification"
+    ],
+    "date": "21/9/2026, 4:13:57 pm"
+  },
+  {
+    "score": 30,
+    "accuracy": 100,
+    "responseTime": 5,
+    "language": "english",
+    "weakAreas": [],
+    "date": "21/9/2026, 4:14:23 pm"
+  },
+  {
+    "score": 20,
+    "accuracy": 67,
+    "responseTime": 11,
+    "language": "english",
+    "weakAreas": [
+      "Decision Making"
+    ],
+    "date": "21/9/2026, 4:27:27 pm"
+  },
+  {
+    "score": 30,
+    "accuracy": 100,
+    "responseTime": 14,
+    "language": "hindi",
+    "weakAreas": [],
+    "date": "21/9/2026, 4:28:11 pm"
+  },
+  {
+    "score": 30,
+    "accuracy": 100,
+    "responseTime": 7,
+    "language": "english",
+    "weakAreas": [],
+    "date": "21/9/2026, 4:36:48 pm"
+  },
+  {
+    "score": 30,
+    "accuracy": 100,
+    "responseTime": 5,
+    "language": "hindi",
+    "weakAreas": [],
+    "date": "21/9/2026, 4:37:28 pm"
+  },
+  {
+    "score": 27,
+    "accuracy": 90,
+    "responseTime": 281,
+    "language": "english",
+    "totalQuestions": 10,
+    "weakAreas": [
+      "Procedure Sequence",
+      "Emergency Response"
+    ],
+    "date": "21/9/2026, 6:33:19 pm"
+  },
+  {
+    "score": 24,
+    "accuracy": 80,
+    "responseTime": 134,
+    "language": "english",
+    "totalQuestions": 10,
+    "weakAreas": [
+      "Decision Making",
+      "Hazard Identification"
+    ],
+    "date": "21/9/2026, 6:41:13 pm"
+  },
+  {
+    "score": 30,
+    "accuracy": 100,
+    "responseTime": 210,
+    "language": "hindi",
+    "totalQuestions": 10,
+    "weakAreas": [],
+    "date": "21/9/2026, 6:49:02 pm"
+  },
+  {
+    "score": 30,
+    "accuracy": 100,
+    "responseTime": 279,
+    "language": "english",
+    "totalQuestions": 10,
+    "weakAreas": [],
+    "date": "21/09/2026, 19:46:39"
+  }
+]
